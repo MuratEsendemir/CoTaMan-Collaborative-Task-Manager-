@@ -1,5 +1,6 @@
 package com.example;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class CalendarEvent implements Comparable<CalendarEvent> {
@@ -11,11 +12,78 @@ public class CalendarEvent implements Comparable<CalendarEvent> {
     private String location;
 
     // Constructor
-    public CalendarEvent(String title, LocalDateTime start, LocalDateTime end, Importance imp) {  }
+    public CalendarEvent(String title, LocalDateTime start, LocalDateTime end, Importance imp) {
+        this.title = title;
+        this.startTime = start;
+        this.endTime = end;
+        this.importance = imp;
+    }
 
 
-    public boolean overlaps(CalendarEvent other) {  return false; }
+    public boolean overlaps(CalendarEvent other) {
+        return (this.startTime.isBefore(other.endTime) && other.startTime.isBefore(this.endTime));
+    }
     
     @Override
-    public int compareTo(CalendarEvent other) { return 0; }
+    public int compareTo(CalendarEvent other) {
+        // Sort by Importance (High to Low), then by Date
+        int priorityComparison = Integer.compare(other.importance.getWeight(), this.importance.getWeight());
+        if (priorityComparison != 0) return priorityComparison;
+        return this.startTime.compareTo(other.startTime);
+    }
+
+    public String getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
+
+    public Importance getImportance() {
+        return importance;
+    }
+
+    public void setImportance(Importance importance) {
+        this.importance = importance;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public Duration getDuration() {
+        if (startTime != null && endTime != null) {
+            return Duration.between(startTime, endTime);
+        }
+        return Duration.ZERO;
+    }
 }
