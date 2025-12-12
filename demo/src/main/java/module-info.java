@@ -10,6 +10,6 @@ module com.example {
     opens com.example to javafx.fxml;
     exports com.example;
 
-    // exports com.cotaman.database;
-    // opens com.cotaman.database to org.mongodb.bson;
+    exports com.example.database;
+    opens com.example.database to org.mongodb.bson;
 }
