@@ -11,15 +11,16 @@ public class IntelligentMeetingSchedular {
   public List<TimeSlot> findCommonSlots(Group group, Duration meetingDuration, LocalDateTime rangeStart, LocalDateTime rangeEnd) {
         List<User> members = group.getMembers();
         List<TimeSlot> commonSlots = new ArrayList<>();
+        
         List<TimeSlot> busySlots = new ArrayList<>();
 
         for (User member : members) {
 
             for (CalendarEvent event : member.getSchedule()) {
                 if (event.getEndTime().isAfter(rangeStart) && event.getStartTime().isBefore(rangeEnd)) {
-                  
                     if (event.getImportance() == Importance.MUST) {
-                         busySlots.add(new TimeSlot(event.getStartTime(), event.getEndTime()));
+
+                        busySlots.add(new TimeSlot(event.getStartTime(), event.getEndTime()));
                     }
                 }
             }
@@ -30,7 +31,9 @@ public class IntelligentMeetingSchedular {
             TimeSlot current = busySlots.get(0);
             for (int i = 1; i < busySlots.size(); i++) {
                 TimeSlot next = busySlots.get(i);
+
                 if (current.getEnd().isAfter(next.getStart()) || current.getEnd().isEqual(next.getStart())) {
+
                     if (next.getEnd().isAfter(current.getEnd())) {
                         current = new TimeSlot(current.getStart(), next.getEnd());
                     }
@@ -43,11 +46,10 @@ public class IntelligentMeetingSchedular {
         }
         LocalDateTime pointer = rangeStart;
         for (TimeSlot busy : mergedBusy) {
-            // Check gap between pointer and start of busy slot
             if (Duration.between(pointer, busy.getStart()).compareTo(meetingDuration) >= 0) {
+
                 commonSlots.add(new TimeSlot(pointer, busy.getStart()));
             }
-            // Move pointer
             if (busy.getEnd().isAfter(pointer)) {
                 pointer = busy.getEnd();
             }

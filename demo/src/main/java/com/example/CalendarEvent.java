@@ -19,6 +19,69 @@ public class CalendarEvent implements Comparable<CalendarEvent> {
         this.importance = imp;
     }
 
+    //Also default constructor.
+    public CalendarEvent() {}
+
+
+    public String getEventId() {
+        return eventId;
+    }
+
+
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
+    }
+
+
+    public String getTitle() {
+        return title;
+    }
+
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
+
+
+    public Importance getImportance() {
+        return importance;
+    }
+
+
+    public void setImportance(Importance importance) {
+        this.importance = importance;
+    }
+
+
+    public String getLocation() {
+        return location;
+    }
+
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
 
     public boolean overlaps(CalendarEvent other) {
         return (this.startTime.isBefore(other.endTime) && other.startTime.isBefore(this.endTime));
@@ -30,54 +93,6 @@ public class CalendarEvent implements Comparable<CalendarEvent> {
         int priorityComparison = Integer.compare(other.importance.getWeight(), this.importance.getWeight());
         if (priorityComparison != 0) return priorityComparison;
         return this.startTime.compareTo(other.startTime);
-    }
-
-    public String getEventId() {
-        return eventId;
-    }
-
-    public void setEventId(String eventId) {
-        this.eventId = eventId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public LocalDateTime getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(LocalDateTime startTime) {
-        this.startTime = startTime;
-    }
-
-    public LocalDateTime getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(LocalDateTime endTime) {
-        this.endTime = endTime;
-    }
-
-    public Importance getImportance() {
-        return importance;
-    }
-
-    public void setImportance(Importance importance) {
-        this.importance = importance;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
     }
 
     public Duration getDuration() {

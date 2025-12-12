@@ -12,20 +12,19 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class CalendarScraper implements IDataFetcher {
+public class CalendarScraper {
 
     // The target URL for the English version of the calendar
     private static final String CALENDAR_URL = "https://w3.bilkent.edu.tr/bilkent/academic-calendar/";
 
     // Keywords to filter only the critical events you asked for
     private static final String[] CRITICAL_KEYWORDS = {
-            "Holiday", "Registration", "Drop deadline", "Add deadline",
-            "Withdraw", "Grades Announced", "Classes Begin", "Final Examinations"
+            "Holiday", "Registration", "Deadline", "Add", "Drop",
+            "Withdraw", "Grades Announced", "Classes Begin", "Final"
     };
 
-    @Override
-    public ArrayList<Event> fetchEvents() {
-        ArrayList<Event> criticalEvents = new ArrayList<>();
+    public ArrayList<DateInfo> fetchDates() {
+        ArrayList<DateInfo> criticalDates = new ArrayList<DateInfo>();
 
         try {
             // 1. Connect and Download HTML
@@ -48,28 +47,25 @@ public class CalendarScraper implements IDataFetcher {
 
                         // 4. Create the Event object
                         // Note: We use a helper method to handle date ranges
-                        Event newEvent = new Event();
-                        newEvent.setTitle(description);
-                        newEvent.setImportance(Importance.MUST); // Academic dates are high priority
-                        newEvent.setLocation("Bilkent"); // Default location
+                        DateInfo newDateInfo = new DateInfo();
+                        newDateInfo.setDescription(description);
 
                         // Parse the date (e.g., "29 October 2024")
-                        LocalDateTime eventDate = parseDate(dateText);
-                        newEvent.setStartTime(eventDate);
-                        newEvent.setEndTime(eventDate.plusHours(1)); // Default duration
+                        LocalDate eventDate = parseDate(dateText);
+                        newDateInfo.setDate(eventDate);
 
-                        criticalEvents.add(newEvent);
-                        System.out.println("✅ Scraped: " + description + " on " + eventDate.toLocalDate());
+                        criticalDates.add(newDateInfo);
+                        System.out.println("Scraped: " + description + " on " + eventDate.toString());
                     }
                 }
             }
 
         } catch (Exception e) {
-            System.err.println("❌ Error scraping calendar: " + e.getMessage());
+            System.err.println("Error scraping calendar: " + e.getMessage());
             e.printStackTrace();
         }
 
-        return criticalEvents;
+        return criticalDates;
     }
 
     // --- Helper Methods ---
@@ -90,7 +86,7 @@ public class CalendarScraper implements IDataFetcher {
      * Parses Bilkent's date format (e.g., "15 September 2025").
      * Uses English Locale since we scrape the English page.
      */
-    private LocalDateTime parseDate(String rawDate) {
+    private LocalDate parseDate(String rawDate) {
         try {
             // Clean up the string (remove day names like ", Tuesday")
             // Input: "15 September 2025, Monday" -> Output: "15 September 2025"
@@ -105,10 +101,10 @@ public class CalendarScraper implements IDataFetcher {
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM yyyy", Locale.ENGLISH);
             LocalDate date = LocalDate.parse(cleanDate, formatter);
-            return date.atStartOfDay(); // Default to 00:00 time
+            return date;
         } catch (Exception e) {
             // Fallback for unexpected formats
-            return LocalDateTime.now();
+            return LocalDate.now();
         }
     }
 
