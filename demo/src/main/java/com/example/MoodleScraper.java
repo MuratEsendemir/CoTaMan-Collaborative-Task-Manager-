@@ -155,10 +155,12 @@ public class MoodleScraper implements IDataFetcher {
                 event.setLocation("Moodle Submission");
                 event.setImportance(Importance.MUST); // Assignments are critical!
                 
-                // We parse the date. Moodle dates are usually clean like "Friday, 12 December, 5:00 PM"
-                // For now, we set a temporary date logic or current time just to test parsing.
-                // In production, we would use a DateFormatter like in CalendarScraper.
-                event.setStartTime(LocalDateTime.now()); 
+                System.out.println("   (Debug) Raw Moodle Date: " + dateText); // Let's see what we got
+                event.setStartTime(parseMoodleDate(dateText));
+                event.setEndTime(event.getStartTime().plusHours(1)); // Default 1 hour duration
+                
+                moodleEvents.add(event);
+                System.out.println("✅ Scraped Assignment: " + event.getTitle() + " Due: " + event.getStartTime());
                 
                 moodleEvents.add(event);
                 System.out.println("Scraped Assignment: " + title);
@@ -187,5 +189,45 @@ public class MoodleScraper implements IDataFetcher {
             builder.append(java.net.URLEncoder.encode(entry.getValue(), java.nio.charset.StandardCharsets.UTF_8));
         }
         return builder.toString();
+    }
+
+    /**
+     * Parses Moodle date formats like "Friday, 12 December, 17:00"
+     * or "Yesterday, 14:00"
+     */
+    private LocalDateTime parseMoodleDate(String rawDate) {
+        try {
+            // 1. Clean the string
+            // Input: "Friday, 12 December, 17:00"
+            // Remove the day name if present (anything before the first comma)
+            String cleanDate = rawDate;
+            if (rawDate.contains(",")) {
+                // If it splits into 3 parts (Day, Date, Time), take the last two
+                // Example: "Friday, 12 December, 17:00" -> " 12 December, 17:00"
+                int firstComma = rawDate.indexOf(",");
+                cleanDate = rawDate.substring(firstComma + 1).trim();
+            }
+
+            // 2. Handle "Tomorrow" / "Yesterday" special cases
+            if (cleanDate.toLowerCase().startsWith("tomorrow")) {
+                String timePart = cleanDate.split(",")[1].trim(); // "17:00"
+                java.time.LocalTime time = java.time.LocalTime.parse(timePart, java.time.format.DateTimeFormatter.ofPattern("HH:mm"));
+                return LocalDateTime.now().plusDays(1).with(time);
+            }
+
+            // 3. Standard Parse: "12 December, 17:00"
+            // We append the current year because Moodle often hides it
+            int currentYear = java.time.Year.now().getValue();
+            String dateWithYear = cleanDate + " " + currentYear; // "12 December, 17:00 2025"
+            
+            java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter
+                    .ofPattern("d MMMM, HH:mm yyyy", java.util.Locale.ENGLISH);
+            
+            return LocalDateTime.parse(dateWithYear, formatter);
+
+        } catch (Exception e) {
+            System.err.println("⚠️ Could not parse date: '" + rawDate + "' -> Using NOW.");
+            return LocalDateTime.now();
+        }
     }
 }
