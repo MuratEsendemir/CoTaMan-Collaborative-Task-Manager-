@@ -8,7 +8,7 @@ public class TestScraper {
 
         // REPLACE WITH YOUR REAL CREDENTIALS TO TEST
         // BUT DO NOT SHARE THIS FILE AFTERWARDS
-        boolean success = moodle.connect("22403411", "yeniYesil2520");
+        boolean success = moodle.connect("22402070", "Yacema397500");
 
         if (success) {
             System.out.println("We are in! Ready to scrape assignments.");
