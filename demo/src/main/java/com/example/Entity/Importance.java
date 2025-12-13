@@ -1,4 +1,4 @@
-package com.example;
+package com.example.Entity;
 
 public enum Importance {
     TRIVIA(1), OPTIONAL(2), MUST(3);

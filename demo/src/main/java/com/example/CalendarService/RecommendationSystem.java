@@ -1,7 +1,8 @@
-package com.example;
+package com.example.CalendarService;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.example.Entity.*;
 
 public class RecommendationSystem {
 

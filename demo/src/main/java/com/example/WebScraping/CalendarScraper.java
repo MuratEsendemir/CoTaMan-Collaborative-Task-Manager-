@@ -1,7 +1,7 @@
 package com.example.WebScraping;
 
 import java.util.ArrayList;
-import com.example.*;
+import com.example.Entity.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;

@@ -1,6 +1,7 @@
-package com.example;
+package com.example.WebScraping;
 
 import java.util.ArrayList;
+import com.example.Entity.*;
 
 /*Defines the standard methods that any scraping class must provide. */
 

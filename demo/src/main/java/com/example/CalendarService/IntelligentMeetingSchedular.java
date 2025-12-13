@@ -1,10 +1,11 @@
-package com.example;
+package com.example.CalendarService;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import com.example.Entity.*;
 
 public class IntelligentMeetingSchedular {
   
