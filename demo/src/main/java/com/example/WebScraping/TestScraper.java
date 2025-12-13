@@ -1,6 +1,7 @@
-package com.example;
+package com.example.WebScraping;
 
 import java.util.ArrayList;
+import com.example.*;
 
 public class TestScraper {
     public static void main(String[] args) {
