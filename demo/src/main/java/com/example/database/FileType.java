@@ -4,5 +4,5 @@ package com.example.database;
         SYLLABUS,       
         LECTURE_NOTES,  
         PAST_EXAM,      
-        OTHER           
+        OTHER      
     }

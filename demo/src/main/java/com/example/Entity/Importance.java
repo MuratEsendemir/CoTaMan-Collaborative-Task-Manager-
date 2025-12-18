@@ -11,6 +11,6 @@ enum Visibility {
     PRIVATE, GROUP, PUBLIC
 }
 
-enum FileType {
+public enum FileType {
     SYLLABUS, LECTURE_NOTE, PAST_EXAM
 }
