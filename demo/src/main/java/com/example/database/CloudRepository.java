@@ -99,6 +99,10 @@ public class CloudRepository {
         return userCollection.find(Filters.eq("_id", id)).first();
     }
 
+    public User getUserByBilkentId(String bilkentId) {
+        return userCollection.find(Filters.eq("bilkentId", bilkentId)).first();
+    }
+
     // --- CALENDAR & FILE METOTLARI ---
 
     public void saveEvent(CalendarEvent event) {
