@@ -6,6 +6,9 @@ import com.mongodb.client.model.Filters;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
+import java.awt.Desktop;
+import java.io.File;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -142,6 +145,38 @@ public class CloudRepository {
             System.out.println("✅ Görev veritabanına eklendi: " + task.getName());
         } catch (Exception e) {
             System.out.println("❌ Görev ekleme hatası: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void openFile(AcademicFile file) {
+        if (file == null || file.getDiskPath() == null) {
+            System.out.println("HATA: Dosya veya dosya yolu geçersiz.");
+            return;
+        }
+        String path = file.getDiskPath();
+        try {
+            if (Desktop.isDesktopSupported()) {
+                Desktop desktop = Desktop.getDesktop();
+                if (path.startsWith("http://") || path.startsWith("https://")) {
+                    // Link ise tarayıcıda aç
+                    desktop.browse(new URI(path));
+                    System.out.println("Bağlantı tarayıcıda açılıyor: " + path);
+                } else {
+                    // Yerel dosya ise varsayılan uygulama ile aç
+                    File localFile = new File(path);
+                    if (localFile.exists()) {
+                        desktop.open(localFile);
+                        System.out.println("Dosya açılıyor: " + localFile.getName());
+                    } else {
+                        System.out.println("HATA: Dosya diskte bulunamadı! -> " + path);
+                    }
+                }
+            } else {
+                System.out.println("HATA: Bu sistemde dosya açma işlemi desteklenmiyor.");
+            }
+        } catch (Exception e) {
+            System.out.println("Dosya açılırken bir hata oluştu: " + e.getMessage());
             e.printStackTrace();
         }
     }

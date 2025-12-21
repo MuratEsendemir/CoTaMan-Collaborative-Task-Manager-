@@ -1,4 +1,6 @@
 module com.example {
+
+    requires java.desktop;
     // JavaFX Modülleri
     requires javafx.controls;
     requires javafx.fxml;
