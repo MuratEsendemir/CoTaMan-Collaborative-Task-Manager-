@@ -24,7 +24,7 @@ public class AuthenticationHandler {
     }
 
     public void onRegisterClick(String name, String surname, String id, String email, String password) {
-        User newUser = new User(id, name + " " + surname, email);
+        User newUser = new User( name + " " + surname, email,password, id);
         // Note: Add logic to save ID/Password if User entity supports it
         repository.saveUser(newUser);
         System.out.println("User Registered: " + email);
